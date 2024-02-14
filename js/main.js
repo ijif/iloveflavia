@@ -24,14 +24,30 @@ var context = canvas
               .getContext('2d');
 
 var spriteSheetLocation = 'js/img/squirrel.png';
-// create a new image from the spritesheet
 var image = new Image();
 image.src = spriteSheetLocation;
 image.crossOrigin = true;
 // once the spritesheet loads,
 // draw it on the canvas
-var position = spritePositionToImagePosition(1,0)
-image.onload = function() {
+var row = 0;
+var col = 0;
+function animate() {
+    // once we hit the end of a row,
+    // move to the next
+    if (col === 3) {
+        col = 0;
+        row += 1;
+    }
+    // once we finish the last row,
+    // start again
+    if (row === 2) {
+        row = 0;
+    }
+
+
+ // make an image position using the 
+    // current row and colum
+    var position = spritePositionToImagePosition(row, col);
     context.drawImage(
         image,
         position.x,
@@ -43,5 +59,10 @@ image.onload = function() {
         SPRITE_WIDTH,
         SPRITE_HEIGHT
     );
+    col += 1;
+}
+
+image.onload = function() {
+    setInterval(animate, 500);
 };
   
