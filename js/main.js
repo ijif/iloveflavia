@@ -1,129 +1,305 @@
-var $window = $(window), gardenCtx, gardenCanvas, $garden, garden;
-var clientWidth = $(window).width();
-var clientHeight = $(window).height();
-$(function () {
-	$loveHeart = $("#loveHeart");
-	var a = $loveHeart.width() / 2;
-	var b = $loveHeart.height() / 2 - 55;
-	$garden = $("#garden");
-	gardenCanvas = $garden[0];
-	gardenCanvas.width = $("#loveHeart").width();
-	gardenCanvas.height = $("#loveHeart").height();
-	gardenCtx = gardenCanvas.getContext("2d");
-	gardenCtx.globalCompositeOperation = "lighter";
-	garden = new Garden(gardenCtx, gardenCanvas);
-	$("#content").css("width", $loveHeart.width() + $("#code").width());
-	$("#content").css("height", Math.max($loveHeart.height(), $("#code").height()));
-	$("#content").css("margin-top", Math.max(($window.height() - $("#content").height()) / 2 - 50, 10));
-	$("#content").css("margin-left", Math.max(($window.width() - $("#content").width()) / 2, 10));
-	setInterval(function () {
-		garden.render()
-	}, Garden.options.growSpeed)
-});
-$(window).resize(function () {
-	var b = $(window).width();
-	var a = $(window).height();
-	if (b != clientWidth && a != clientHeight) {
-		location.replace(location)
-	}
-});
-
-function getHeartPoint(c) {
-	var b = c / Math.PI;
-	var a = 19.5 * (16 * Math.pow(Math.sin(b), 3));
-	var d = -20 * (13 * Math.cos(b) - 5 * Math.cos(2 * b) - 2 * Math.cos(3 * b) - Math.cos(4 * b));
-	return new Array(offsetX + a, offsetY + d)
-}
-
-function startHeartAnimation() {
-	var c = 50;
-	var d = 10;
-	var b = new Array();
-	var a = setInterval(function () {
-		var h = getHeartPoint(d);
-		var e = true;
-		for (var f = 0; f < b.length; f++) {
-			var g = b[f];
-			var j = Math.sqrt(Math.pow(g[0] - h[0], 2) + Math.pow(g[1] - h[1], 2));
-			if (j < Garden.options.bloomRadius.max * 1.3) {
-				e = false;
-				break
-			}
-		}
-		if (e) {
-			b.push(h);
-			garden.createRandomBloom(h[0], h[1])
-		}
-		if (d >= 30) {
-			clearInterval(a);
-			showMessages()
-		} else {
-			d += 0.2
-		}
-	}, c)
-}
-
-(function (a) {
-	a.fn.typewriter = function () {
-		this.each(function () {
-			var d = a(this), c = d.html(), b = 0;
-			d.html("");
-			var e = setInterval(function () {
-				var f = c.substr(b, 1);
-				if (f == "<") {
-					b = c.indexOf(">", b) + 1
-				} else {
-					b++
-				}
-				d.html(c.substring(0, b) + (b & 1 ? "_" : ""));
-				if (b >= c.length) {
-					clearInterval(e)
-				}
-			}, 75)
-		});
-		return this
-	}
-})(jQuery);
-
-function timeElapse(c) {
-	var e = Date();
-	var f = (Date.parse(e) - Date.parse(c)) / 1000;
-	var g = Math.floor(f / (3600 * 24));
-	f = f % (3600 * 24);
-	var b = Math.floor(f / 3600);
-	if (b < 10) {
-		b = "0" + b
-	}
-	f = f % 3600;
-	var d = Math.floor(f / 60);
-	if (d < 10) {
-		d = "0" + d
-	}
-	f = f % 60;
-	if (f < 10) {
-		f = "0" + f
-	}
-	var a = '<span class="digit">' + g + '</span> days <span class="digit">' + b + '</span> hours <span class="digit">' + d + '</span> minutes <span class="digit">' + f + "</span> seconds";
-	$("#elapseClock").html(a)
-}
-
-function showMessages() {
-	adjustWordsPosition();
-	$("#messages").fadeIn(5000, function () {
-		showLoveU()
-	})
-}
-
-function adjustWordsPosition() {
-	$("#words").css("position", "absolute");
-	$("#words").css("top", $("#garden").position().top + 195);
-	$("#words").css("left", $("#garden").position().left + 70)
-}
-
-function adjustCodePosition() {
-	$("#code").css("margin-top", ($("#garden").height() - $("#code").height()) / 2)
-}
-
-function showLoveU() {
-	$("#loveu").fadeIn(3000)
-};
+// Animation Timeline
+const animationTimeline = () => {
+    // Spit chars that needs to be animated individually
+    const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
+    const hbd = document.getElementsByClassName("wish-hbd")[0];
+  
+    textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
+      .split("")
+      .join("</span><span>")}</span`;
+  
+    hbd.innerHTML = `<span>${hbd.innerHTML
+      .split("")
+      .join("</span><span>")}</span`;
+  
+    const ideaTextTrans = {
+      opacity: 0,
+      y: -20,
+      rotationX: 5,
+      skewX: "15deg",
+    };
+  
+    const ideaTextTransLeave = {
+      opacity: 0,
+      y: 20,
+      rotationY: 5,
+      skewX: "-15deg",
+    };
+  
+    const tl = new TimelineMax();
+  
+    tl.to(".container", 0.1, {
+      visibility: "visible",
+    })
+      .from(".one", 0.7, {
+        opacity: 0,
+        y: 10,
+      })
+      .from(".two", 0.4, {
+        opacity: 0,
+        y: 10,
+      })
+      .to(
+        ".one",
+        0.7,
+        {
+          opacity: 0,
+          y: 10,
+        },
+        "+=2.5"
+      )
+      .to(
+        ".two",
+        0.7,
+        {
+          opacity: 0,
+          y: 10,
+        },
+        "-=1"
+      )
+      .from(".three", 0.7, {
+        opacity: 0,
+        y: 10,
+        // scale: 0.7
+      })
+      .to(
+        ".three",
+        0.7,
+        {
+          opacity: 0,
+          y: 10,
+        },
+        "+=2"
+      )
+      .from(".four", 0.7, {
+        scale: 0.2,
+        opacity: 0,
+      })
+      .from(".fake-btn", 0.3, {
+        scale: 0.2,
+        opacity: 0,
+      })
+      .staggerTo(
+        ".hbd-chatbox span",
+        0.5,
+        {
+          visibility: "visible",
+        },
+        0.05
+      )
+      .to(".fake-btn", 0.1, {
+        backgroundColor: "rgb(127, 206, 248)",
+      })
+      .to(
+        ".four",
+        0.5,
+        {
+          scale: 0.2,
+          opacity: 0,
+          y: -150,
+        },
+        "+=0.7"
+      )
+      .from(".idea-1", 0.7, ideaTextTrans)
+      .to(".idea-1", 0.7, ideaTextTransLeave, "+=1.5")
+      .from(".idea-2", 0.7, ideaTextTrans)
+      .to(".idea-2", 0.7, ideaTextTransLeave, "+=1.5")
+      .from(".idea-3", 0.7, ideaTextTrans)
+      .to(".idea-3 strong", 0.5, {
+        scale: 1.2,
+        x: 10,
+        backgroundColor: "rgb(21, 161, 237)",
+        color: "#fff",
+      })
+      .to(".idea-3", 0.7, ideaTextTransLeave, "+=1.5")
+      .from(".idea-4", 0.7, ideaTextTrans)
+      .to(".idea-4", 0.7, ideaTextTransLeave, "+=1.5")
+      .from(
+        ".idea-5",
+        0.7,
+        {
+          rotationX: 15,
+          rotationZ: -10,
+          skewY: "-5deg",
+          y: 50,
+          z: 10,
+          opacity: 0,
+        },
+        "+=0.5"
+      )
+      .to(
+        ".idea-5 span",
+        0.7,
+        {
+          rotation: 90,
+          x: 8,
+        },
+        "+=0.4"
+      )
+      .to(
+        ".idea-5",
+        0.7,
+        {
+          scale: 0.2,
+          opacity: 0,
+        },
+        "+=2"
+      )
+      .staggerFrom(
+        ".idea-6 span",
+        0.8,
+        {
+          scale: 3,
+          opacity: 0,
+          rotation: 15,
+          ease: Expo.easeOut,
+        },
+        0.2
+      )
+      .staggerTo(
+        ".idea-6 span",
+        0.8,
+        {
+          scale: 3,
+          opacity: 0,
+          rotation: -15,
+          ease: Expo.easeOut,
+        },
+        0.2,
+        "+=1"
+      )
+      .staggerFromTo(
+        ".baloons img",
+        2.5,
+        {
+          opacity: 0.9,
+          y: 1400,
+        },
+        {
+          opacity: 1,
+          y: -1000,
+        },
+        0.2
+      )
+      .from(
+        ".girl-dp",
+        0.5,
+        {
+          scale: 3.5,
+          opacity: 0,
+          x: 25,
+          y: -25,
+          rotationZ: -45,
+        },
+        "-=2"
+      )
+      .from(".hat", 0.5, {
+        x: -100,
+        y: 350,
+        rotation: -180,
+        opacity: 0,
+      })
+      .staggerFrom(
+        ".wish-hbd span",
+        0.7,
+        {
+          opacity: 0,
+          y: -50,
+          // scale: 0.3,
+          rotation: 150,
+          skewX: "30deg",
+          ease: Elastic.easeOut.config(1, 0.5),
+        },
+        0.1
+      )
+      .staggerFromTo(
+        ".wish-hbd span",
+        0.7,
+        {
+          scale: 1.4,
+          rotationY: 150,
+        },
+        {
+          scale: 1,
+          rotationY: 0,
+          color: "#ff69b4",
+          ease: Expo.easeOut,
+        },
+        0.1,
+        "party"
+      )
+      .from(
+        ".wish h5",
+        0.5,
+        {
+          opacity: 0,
+          y: 10,
+          skewX: "-15deg",
+        },
+        "party"
+      )
+      .staggerTo(
+        ".eight svg",
+        1.5,
+        {
+          visibility: "visible",
+          opacity: 0,
+          scale: 80,
+          repeat: 3,
+          repeatDelay: 1.4,
+        },
+        0.3
+      )
+      .to(".six", 0.5, {
+        opacity: 0,
+        y: 30,
+        zIndex: "-1",
+      })
+      .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
+      .to(
+        ".last-smile",
+        0.5,
+        {
+          rotation: 90,
+        },
+        "+=1"
+      );
+  
+    // tl.seek("currentStep");
+    // tl.timeScale(2);
+  
+    // Restart Animation on click
+    const replyBtn = document.getElementById("replay");
+    replyBtn.addEventListener("click", () => {
+      tl.restart();
+    });
+  };
+  
+  // Import the data to customize and insert them into page
+  const fetchData = () => {
+    fetch("customize.json")
+      .then((data) => data.json())
+      .then((data) => {
+        Object.keys(data).map((customData) => {
+          if (data[customData] !== "") {
+            if (customData === "imagePath") {
+              document
+                .getElementById(customData)
+                .setAttribute("src", data[customData]);
+            } else {
+              document.getElementById(customData).innerText = data[customData];
+            }
+          }
+        });
+      });
+  };
+  
+  // Run fetch and animation in sequence
+  const resolveFetch = () => {
+    return new Promise((resolve, reject) => {
+      fetchData();
+      resolve("Fetch done!");
+    });
+  };
+  
+  resolveFetch().then(animationTimeline());
