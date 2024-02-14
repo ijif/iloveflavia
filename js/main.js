@@ -3,7 +3,7 @@ var canvas = document
 var context = canvas
               .getContext('2d');
 
-var spriteSheetURL = 'https://elthen.itch.io/2d-pixel-art-squirrel-sprites';
+var spriteSheetURL = 'https://codehs.com/uploads/e4cfb06e001bd92cf41139928e88819a';
 // create a new image from the spritesheet
 var image = new Image();
 image.src = spriteSheetURL;
