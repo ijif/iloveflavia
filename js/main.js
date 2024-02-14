@@ -54,8 +54,8 @@ function animate() {
         position.y,
         SPRITE_WIDTH,
         SPRITE_HEIGHT,
-        0,
-        0,
+        600,
+        600,
         SPRITE_WIDTH,
         SPRITE_HEIGHT
     );
