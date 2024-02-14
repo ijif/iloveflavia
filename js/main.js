@@ -3,7 +3,7 @@ var canvas = document
 var context = canvas
               .getContext('2d');
 
-var spriteSheetURL = 'https://codehs.com/uploads/e4cfb06e001bd92cf41139928e88819a';
+var spriteSheetURL = 'https://opengameart.org/content/pixel-squirrel';
 // create a new image from the spritesheet
 var image = new Image();
 image.src = spriteSheetURL;
