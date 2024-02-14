@@ -21,9 +21,9 @@ var canvas = document
 var context = canvas
               .getContext('2d');
 
-var spriteSheetURL = 'https://codehs.com/uploads/e4cfb06e001bd92cf41139928e88819a';
+var spriteSheetLocation = 'js/img/squirrel.png';
 var image = new Image();
-image.src = spriteSheetURL;
+image.src = spriteSheetLocation;
 image.crossOrigin = true;
 
 // extract all of our frames
