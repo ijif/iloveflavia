@@ -3,10 +3,10 @@ var canvas = document
 var context = canvas
               .getContext('2d');
 
-var spriteSheetURL = 'https://opengameart.org/content/pixel-squirrel';
+var spriteSheetLocation = 'js/img/squirrel.png';
 // create a new image from the spritesheet
 var image = new Image();
-image.src = spriteSheetURL;
+image.src = spriteSheetLocation;
 image.crossOrigin = true;
 // once the spritesheet loads,
 // draw it on the canvas
