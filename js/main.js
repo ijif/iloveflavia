@@ -16,53 +16,61 @@ function spritePositionToImagePosition(row, col) {
     }
 }
 
-
-
 var canvas = document
             .querySelector('canvas');
 var context = canvas
               .getContext('2d');
 
-var spriteSheetLocation = 'js/img/squirrel.png';
+var spriteSheetURL = 'https://codehs.com/uploads/e4cfb06e001bd92cf41139928e88819a';
 var image = new Image();
-image.src = spriteSheetLocation;
+image.src = spriteSheetURL;
 image.crossOrigin = true;
-// once the spritesheet loads,
-// draw it on the canvas
-var row = 0;
-var col = 0;
+
+// extract all of our frames
+var karelright0 = spritePositionToImagePosition(0, 0);
+var karelright1 = spritePositionToImagePosition(0, 1);
+var karelright2 = spritePositionToImagePosition(0, 2);
+var karelleftt0 = spritePositionToImagePosition(1, 0);
+var karelleft1 = spritePositionToImagePosition(1, 1);
+var karelleft2 = spritePositionToImagePosition(1, 2);
+
+var walkCycle = [
+    karelright0,
+    karelright1,
+    karelright2,
+    karelright1
+];
+
+var frameIndex = 0;
+var frame;
 function animate() {
-    // once we hit the end of a row,
-    // move to the next
-    if (col === 3) {
-        col = 0;
-        row += 1;
-    }
-    // once we finish the last row,
+    // once we hit the end of the cycle,
     // start again
-    if (row === 2) {
-        row = 0;
+    if (frameIndex === walkCycle.length) {
+        frameIndex = 0;
     }
-
-
- // make an image position using the 
-    // current row and colum
-    var position = spritePositionToImagePosition(row, col);
+    frame = walkCycle[frameIndex];
+    context.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
     context.drawImage(
         image,
-        position.x,
-        position.y,
+        frame.x,
+        frame.y,
         SPRITE_WIDTH,
         SPRITE_HEIGHT,
-        600,
-        600,
+        0,
+        0,
         SPRITE_WIDTH,
         SPRITE_HEIGHT
     );
-    col += 1;
+    frameIndex += 1;
 }
 
 image.onload = function() {
-    setInterval(animate, 500);
+    setInterval(animate, 250);
 };
   
